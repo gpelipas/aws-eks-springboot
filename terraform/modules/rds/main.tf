@@ -88,6 +88,15 @@ resource "aws_db_instance" "main" {
   tags = { Name = "${local.name}-postgres" }
 }
 
-output "endpoint"       { value = aws_db_instance.main.address  sensitive = true }
-output "secret_arn"     { value = aws_secretsmanager_secret.db_credentials.arn }
-output "db_sg_id"       { value = aws_security_group.rds.id }
+output "endpoint" {
+  value     = aws_db_instance.main.address
+  sensitive = true
+}
+
+output "secret_arn" {
+  value = aws_secretsmanager_secret.db_credentials.arn
+}
+
+output "db_sg_id" {
+  value = aws_security_group.rds.id
+}
