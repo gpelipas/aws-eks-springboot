@@ -1,0 +1,65 @@
+replicaCount: 2
+
+image:
+  repository: ""   # Set via --set image.repository=<ECR_URL>
+  tag: latest
+  pullPolicy: Always
+
+serviceAccount:
+  create: true
+  name: url-shortener-sa
+  annotations:
+    eks.amazonaws.com/role-arn: ""   # Set via --set serviceAccount.annotations."eks.amazonaws.com/role-arn"=<ROLE_ARN>
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+  hosts:
+    - host: ""   # Set your domain
+      paths:
+        - path: /
+          pathType: Prefix
+
+hpa:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+env:
+  SPRING_DATASOURCE_URL: ""        # Set via CI or values override
+  SPRING_DATASOURCE_USERNAME: ""
+  SPRING_PROFILES_ACTIVE: prod
+
+probes:
+  liveness:
+    path: /health
+    initialDelaySeconds: 30
+    periodSeconds: 15
+  readiness:
+    path: /health
+    initialDelaySeconds: 20
+    periodSeconds: 10
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
