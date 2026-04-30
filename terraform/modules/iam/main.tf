@@ -3,10 +3,7 @@ variable "environment" {}
 variable "eks_cluster_name" {}
 variable "oidc_issuer_url" {}
 variable "oidc_provider_arn" {}
-variable "github_org" {
-  description = "GitHub username or org that owns the repository"
-  default     = "gpelipas"
-}
+variable "github_org" {}
 
 locals {
   name         = "${var.project}-${var.environment}"

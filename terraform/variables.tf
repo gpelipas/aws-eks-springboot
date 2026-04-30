@@ -27,3 +27,9 @@ variable "rds_instance_class" {
   type        = string
   default     = "db.t3.micro"
 }
+
+variable "github_org" {
+  description = "GitHub username or org that owns the repository"
+  type        = string
+  default     = "gpelipas"
+}
