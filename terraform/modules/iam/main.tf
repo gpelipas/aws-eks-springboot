@@ -3,6 +3,10 @@ variable "environment" {}
 variable "eks_cluster_name" {}
 variable "oidc_issuer_url" {}
 variable "oidc_provider_arn" {}
+variable "github_org" {
+  description = "GitHub username or org that owns the repository"
+  default     = "gpelipas"
+}
 
 locals {
   name         = "${var.project}-${var.environment}"
@@ -78,7 +82,7 @@ resource "aws_iam_role" "github_actions" {
       Action = "sts:AssumeRoleWithWebIdentity"
       Condition = {
         StringLike = {
-          "token.actions.githubusercontent.com:sub" = "repo:YOUR_GITHUB_ORG/${var.project}:*"
+          "token.actions.githubusercontent.com:sub" = "repo:${var.github_org}/${var.project}:*"
         }
       }
     }]
