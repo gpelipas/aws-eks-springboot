@@ -72,6 +72,12 @@ cd terraform
 terraform init
 terraform plan -out=tfplan
 terraform apply tfplan
+
+# .. or use open-source alternative - tofu
+tofu init
+tofu plan -out=tfplan
+tofu apply tfplan
+
 ```
 
 ### 2 — Configure GitHub secrets
