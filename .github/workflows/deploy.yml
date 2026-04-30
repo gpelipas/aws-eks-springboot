@@ -83,8 +83,15 @@ jobs:
             --set env.SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} \
             --set-string dbPassword=$(echo -n "${{ secrets.DB_PASSWORD }}" | base64) \
             --wait \
-            --timeout 5m \
+            --timeout 10m \
             --atomic   # Auto-rollback on failure
+
+      - name: Debug failed pods
+        if: failure()
+        run: |
+          kubectl get pods -n $NAMESPACE
+          kubectl describe pods -n $NAMESPACE
+          kubectl get events -n $NAMESPACE --sort-by='.lastTimestamp' | tail -30
 
       - name: Verify rollout
         run: |
