@@ -45,6 +45,8 @@ resources:
     cpu: 500m
     memory: 512Mi
 
+dbPassword: ""   # Set via CI --set-string dbPassword=<base64>
+
 env:
   SPRING_DATASOURCE_URL: ""        # Set via CI or values override
   SPRING_DATASOURCE_USERNAME: ""
