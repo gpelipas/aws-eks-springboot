@@ -39,8 +39,9 @@ management:
 
 logging:
   level:
-    com.urlshortener: INFO
+    dev.gpelipas: INFO
     org.springframework: WARN
+    com.zaxxer.hikari: DEBUG
 
   pattern: 
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{40} - %msg%n"
