@@ -8,11 +8,11 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "url-shortener-tfstate"
+    bucket         = "awsdad-url-shortener-tfstate"
     key            = "prod/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true
-    dynamodb_table = "url-shortener-tflock"
+    dynamodb_table = "awsdad-url-shortener-tflock"
   }
 }
 
@@ -63,7 +63,7 @@ module "rds" {
   eks_sg_id       = module.eks.node_security_group_id
   db_name         = "urlshortener"
   instance_class  = var.rds_instance_class
-  postgres_version = "16.2"
+  postgres_version = "16.13"
 }
 
 module "iam" {
