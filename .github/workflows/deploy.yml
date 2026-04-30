@@ -11,6 +11,7 @@ on:
         options: [prod, staging]
 
 env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # replaces node ver20
   AWS_REGION:    us-east-1
   ECR_REGISTRY:  ${{ secrets.ECR_REGISTRY }}
   ECR_REPO:      url-shortener
