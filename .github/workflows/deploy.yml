@@ -92,6 +92,7 @@ jobs:
             --set-string dbPassword=$(echo -n "${{ secrets.DB_PASSWORD }}" | base64) \
             --wait \
             --timeout 10m \
+            --debug \
             --atomic   # Auto-rollback on failure
 
       - name: Debug failed pods
