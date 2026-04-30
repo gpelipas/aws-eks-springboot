@@ -72,6 +72,14 @@ jobs:
       - name: Create namespace if missing
         run: kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
 
+      - name: Debug DB connection values
+        run: |
+          echo "DB_URL=${{ secrets.DB_URL }}"
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}"
+          echo "DB_PASSWORD length=${#DB_PASSWORD}"
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
       - name: Deploy with Helm
         run: |
           helm upgrade --install $HELM_RELEASE ./helm/url-shortener \
