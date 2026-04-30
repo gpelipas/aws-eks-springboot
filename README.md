@@ -1,6 +1,6 @@
 # AWS EKS SPRINGBOOT PROJECT
 
-Basic URL shortner application built using tech stacks: **EKS, Spring Boot, RDS PostgreSQL, API Gateway, Terraform, Helm, and GitHub Actions**.
+Basic URL shortner application built using the ff. tech stacks: **EKS, Spring Boot, RDS PostgreSQL, API Gateway, Terraform, Helm, and GitHub Actions**.
 
 ## Stack
 
