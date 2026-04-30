@@ -1,6 +1,6 @@
-# URL Shortener — AWS Portfolio Project
+# AWS EKS SPRINGBOOT PROJECT
 
-A production-grade URL shortener showcasing **EKS, Spring Boot, RDS PostgreSQL, API Gateway, Terraform, Helm, and GitHub Actions**.
+Basic URL shortner application built using tech stacks: **EKS, Spring Boot, RDS PostgreSQL, API Gateway, Terraform, Helm, and GitHub Actions**.
 
 ## Stack
 
