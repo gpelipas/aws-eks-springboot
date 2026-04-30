@@ -58,7 +58,12 @@ Thumbs.db
 **.hcl
 */*.tfvars
 */*.hcl
-*/*/.terraform/.tfvars
-*/*/.terraform.lock.hcl
-*/*/.terraform.lock.hcl 
+*/.terraform/
+*/.terraform.lock.hcl
+*/.terraform.lock.hcl
 
+
+*.tfplan
+*.tfstate
+*.tfstate.backup    
+*/*tfplan
