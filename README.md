@@ -7,7 +7,7 @@ Basic URL shortner application built using the ff. tech stacks: **EKS, Spring Bo
 | Layer       | Technology                              |
 |-------------|------------------------------------------|
 | Compute     | AWS EKS (managed Kubernetes)            |
-| App         | Spring Boot 3.2 / Java 21               |
+| App         | Spring Boot 4.0.6 / Java 21               |
 | Database    | RDS PostgreSQL 16 + Flyway migrations   |
 | Registry    | Amazon ECR                              |
 | Networking  | VPC, ALB Ingress, API Gateway           |
