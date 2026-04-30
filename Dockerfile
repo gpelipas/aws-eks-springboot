@@ -1,5 +1,5 @@
 # --- Build stage ---
-FROM gradle:8.7-jdk21 AS build
+FROM gradle:9.4.1-jdk21 AS build
 WORKDIR /app
 # Cache dependencies before copying source
 COPY build.gradle.kts settings.gradle.kts ./
