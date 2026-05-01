@@ -3,6 +3,7 @@ variable "environment" {}
 
 resource "aws_ecr_repository" "main" {
   name                 = "${var.project}"
+  force_delete         = true 
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {

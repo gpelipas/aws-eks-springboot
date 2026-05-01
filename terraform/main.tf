@@ -5,6 +5,14 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 2.17"
+    }
+    http = {
+      source  = "hashicorp/http"
+      version = "~> 3.0"
+    }
   }
 
   backend "s3" {
@@ -27,6 +35,18 @@ provider "aws" {
   }
 }
 
+provider "helm" {
+  kubernetes {
+    host                   = module.eks.cluster_endpoint
+    cluster_ca_certificate = base64decode(module.eks.cluster_ca)
+    exec {
+      api_version = "client.authentication.k8s.io/v1beta1"
+      args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
+      command     = "aws"
+    }
+  }
+}
+
 module "vpc" {
   source             = "./modules/vpc"
   project            = var.project
@@ -42,50 +62,38 @@ module "ecr" {
 }
 
 module "eks" {
-  source           = "./modules/eks"
+  source             = "./modules/eks"
+  project            = var.project
+  environment        = var.environment
+  vpc_id             = module.vpc.vpc_id
+  subnet_ids         = module.vpc.private_subnet_ids
+  cluster_version    = "1.30"
+  node_instance_type = var.eks_node_instance_type
+  node_min           = 1
+  node_max           = 4
+  node_desired       = 2
+}
+
+module "rds" {
+  source           = "./modules/rds"
   project          = var.project
   environment      = var.environment
   vpc_id           = module.vpc.vpc_id
   subnet_ids       = module.vpc.private_subnet_ids
-  cluster_version  = "1.30"
-  node_instance_type = var.eks_node_instance_type
-  node_min         = 1
-  node_max         = 4
-  node_desired     = 2
-}
-
-module "rds" {
-  source          = "./modules/rds"
-  project         = var.project
-  environment     = var.environment
-  vpc_id          = module.vpc.vpc_id
-  subnet_ids      = module.vpc.private_subnet_ids
-  eks_sg_id       = module.eks.node_security_group_id
-  db_name         = "urlshortener"
-  instance_class  = var.rds_instance_class
+  eks_sg_id        = module.eks.node_security_group_id
+  db_name          = "urlshortener"
+  instance_class   = var.rds_instance_class
   postgres_version = "16.13"
 }
 
 module "iam" {
-  source           = "./modules/iam"
-  project          = var.project
-  environment      = var.environment
-  eks_cluster_name = module.eks.cluster_name
-  oidc_issuer_url  = module.eks.oidc_issuer_url
+  source            = "./modules/iam"
+  project           = var.project
+  environment       = var.environment
+  eks_cluster_name  = module.eks.cluster_name
+  oidc_issuer_url   = module.eks.oidc_issuer_url
   oidc_provider_arn = module.eks.oidc_provider_arn
-}
-
-# --- Helm provider for installing Kubernetes apps via Terraform ---
-provider "helm" {
-  kubernetes {
-    host                   = module.eks.cluster_endpoint
-    cluster_ca_certificate = base64decode(module.eks.cluster_ca)
-    exec {
-      api_version = "client.authentication.k8s.io/v1beta1"
-      args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
-      command     = "aws"
-    }
-  }
+  github_org        = var.github_org
 }
 
 # --- AWS Load Balancer Controller ---
