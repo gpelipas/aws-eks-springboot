@@ -67,3 +67,5 @@ Thumbs.db
 *.tfstate
 *.tfstate.backup    
 */*tfplan
+
+**.zip
