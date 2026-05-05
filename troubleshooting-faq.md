@@ -535,3 +535,49 @@ aws iam get-role \
   --query 'Role.Arn' \
   --output text
 ```
+
+---
+
+## Terraform Backend
+
+### S3 bucket does not exist
+**Error:**
+```
+Failed to get existing workspaces: S3 bucket does not exist
+```
+**Cause:** S3 state bucket and/or DynamoDB lock table were deleted.
+
+**Fix:**
+```bash
+# Recreate S3 bucket
+aws s3 mb s3://awsdad-url-shortener-tfstate \
+  --region us-east-1
+
+# Enable versioning
+aws s3api put-bucket-versioning \
+  --bucket awsdad-url-shortener-tfstate \
+  --versioning-configuration Status=Enabled
+
+# Enable encryption
+aws s3api put-bucket-encryption \
+  --bucket awsdad-url-shortener-tfstate \
+  --server-side-encryption-configuration '{
+    "Rules": [{
+      "ApplyServerSideEncryptionByDefault": {
+        "SSEAlgorithm": "AES256"
+      }
+    }]
+  }'
+
+# Recreate DynamoDB lock table
+aws dynamodb create-table \
+  --table-name awsdad-url-shortener-tflock \
+  --attribute-definitions AttributeName=LockID,AttributeType=S \
+  --key-schema AttributeName=LockID,KeyType=HASH \
+  --billing-mode PAY_PER_REQUEST \
+  --region us-east-1
+
+# Then run init
+tofu init
+```
+**Recommendation:** Never destroy the S3 bucket and DynamoDB table — they cost almost nothing and save this hassle on every re-provision.
